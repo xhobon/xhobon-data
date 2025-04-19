@@ -1,0 +1,25 @@
+name: Update Data
+
+on:
+  repository_dispatch:
+    types: [update-data]
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Update data file
+        run: |
+          echo '${{ github.event.client_payload.data }}' > ${{ github.event.client_payload.filename }}
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update ${{ github.event.client_payload.filename }}"
+          git push
+添加数据更新工作流
